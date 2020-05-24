@@ -52,7 +52,7 @@ public class Main extends Application{
         // Keyがタイプされたイベントを登録するコンビニエンスメソッド
         // command.addEventHandler( KeyEvent.KEY_TYPED , handler )と等価
         final EventHandler<KeyEvent> enterActionFilter = (event) ->
-         execEnterAction(event, command, result, image, imgView);
+         execEnterAction(event, command, result, imgView);
         command.addEventHandler(KeyEvent.KEY_PRESSED, enterActionFilter);
 
         final Scene scene = new Scene(root, 600, 400);// シーンの新規生成
@@ -62,15 +62,43 @@ public class Main extends Application{
 
     // [Abstract] コマンド入力時のイベントリスナ
     // [Projection] f: (KeyEvent, TextField) -> None
-    private void execEnterAction(KeyEvent e, TextField c, Label l, Image img, ImageView imgView)
+    private void execEnterAction(KeyEvent e, TextField c, Label l, ImageView imgView)
     {
+        String cmd = c.getText();
         // [Tips] javaの文字列比較は"=="ではなくequalメソッドを使う必要がある
         //        ("=="比較はオブジェクト自体の比較になるため)
         if(e.getText().equals("\r"))  
         {
-            System.out.println( "要求コマンドは" + c.getText() +"ですね。" );
-            l.setText("要求コマンドは" + c.getText() +"ですね。" );
+            String path = new File(".").getAbsoluteFile().getParent();
+            System.out.println("要求コマンドは" + cmd +"ですね。" );
+            if(execCommnd( cmd ) == true)
+            {
+                l.setText("要求コマンドは" + cmd +"ですね。" );
+                Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
+                imgView.setImage(next_img);
+            }
+            else
+            {
+                l.setText("そんなコマンドありませんよ？");
+
+                Image next_img = new Image( "file:///" + path + "\\img\\angry.png" );
+                imgView.setImage(next_img);
+            }
             c.clear();
+        }
+    }
+
+    // [Abstract]   要求されたコマンドの実行を行う
+    // [Projection] f: String -> Boolean
+    private Boolean execCommnd( String cmd )
+    {
+        if( cmd.equals("ls") )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     
