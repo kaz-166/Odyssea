@@ -16,23 +16,24 @@ public  class Command {
 
     public static String getComment( String cmd )
     {
-        if( cmd.equals("ls") )
+        String[] cmdset = cmd.split(" +");
+        if( cmdset[0].equals("ls") )
         {
             return ("要求コマンドは" + cmd +"ですね。\nすみません、この機能は現在実装中ですので暫くお待ちください" );
         }
-        if( cmd.equals("cd") )
+        if( cmdset[0].equals("cd") )
         {
             return ("要求コマンドは" + cmd +"ですね。\nすみません、この機能は現在実装中ですので暫くお待ちください" );
         }
-        else if(cmd.equals("pwd"))
+        else if(cmdset[0].equals("pwd"))
         {
             return ("現在のディレクトリですね。\n" + Settings.OWNER_NAME + "さんは現在「"+ Settings.current_path +"」の階層に居ますよ。");
         }
-        else if(cmd.equals("chat"))
+        else if(cmdset[0].equals("chat"))
         {
             return chats[rand.nextInt(chats.length)][0];
         }
-        else if(cmd.equals("weather"))
+        else if(cmdset[0].equals("weather"))
         {
             String html = HTTPConnection.scraping(Settings.WEATHER_URL);
             html  = html.split("comment:")[1];
@@ -43,11 +44,11 @@ public  class Command {
             return ("関東地方の天気情報ですね。ええと...\n" + html);
         }
         // COVID-19の情報取得するコマンド
-        else if(cmd.equals("covid19"))
+        else if(cmdset[0].equals("covid19"))
         {
             String html = HTTPConnection.scraping(Settings.COVID19_TOKYO_URL);
-            html  = html.split("新規患者に関する報告件数の推移")[1];
-            String[] info = html.split("日別値");
+            String[] scr  = html.split("新規患者に関する報告件数の推移");
+            String[] info = scr[1].split("日別値");
             String new_patients = info[0];
             new_patients  = new_patients.split("<small")[0];
             new_patients  = new_patients.split("<span class=\"DataView-DataInfo-summary\">|<small class=\"DataView-DataInfo-date\">")[1];
@@ -55,16 +56,22 @@ public  class Command {
             
             String date = info[0].split("<span class=\"DataView-DataInfo-summary\">|<small class=\"DataView-DataInfo-date\">")[2];
             date = date.replaceAll(" ","");
-            
+
+            String accm = scr[0];
+            accm = accm.split("陽性者数")[1];
+            accm = accm.split("<strong>")[1];
+            accm = accm.split("</strong>")[0];
+
             String rate = info[1].split("</small>")[0];
             rate = rate.replaceAll("（", "(");
             rate = rate.replaceAll("）", ")");
             
 
-            String comment = "新型コロナウイルス(COVID-19)の情報です。\n";
+            String comment = "新型コロナウイルス(COVID-19)の情報ですね。\n";
             comment += "直近(";
             comment +=  date;
             comment += ")の東京都の新規感染者数は" + new_patients + "人"+ rate +"です。\n";
+            comment += "これにより東京都内の累計感染者数は" + accm + "人となりました。\n";
             comment += "外出後は手洗いうがいをして体調管理には気をつけましょうね。";
             return comment;
         }
