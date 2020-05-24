@@ -27,13 +27,14 @@ public class Main extends Application{
         final VBox root = new VBox(); // ルートのコンテナ
 
         String path = new File(".").getAbsoluteFile().getParent();
+        Settings.current_path = path;
         // File URI schemeで指定する
         Image image = new Image( "file:///" + path + "\\img\\normal.png" );
         //imageviewの作成
         ImageView imgView = new ImageView(image);
         root.getChildren().add(imgView);
 
-        final Label label = new Label("Oddysea Command Line");
+        final Label label = new Label("要件は何でしょう？");
         root.getChildren().add(label); // コンテナにラベルを貼りつける
 
         // コマンドの入力するフォームの作成
