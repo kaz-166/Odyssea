@@ -23,7 +23,7 @@ public class Main extends Application{
     @Override
     public void start(final Stage primaryStage) throws Exception {
         System.setProperty("prism.lcdtext", "false");
-        primaryStage.setTitle("CommandLine"); // ステージのメインタイトルを設定する
+        primaryStage.setTitle("Oddysea Command Line"); // ステージのメインタイトルを設定する
         final VBox root = new VBox(); // ルートのコンテナ
 
         String path = new File(".").getAbsoluteFile().getParent();
@@ -33,7 +33,7 @@ public class Main extends Application{
         ImageView imgView = new ImageView(image);
         root.getChildren().add(imgView);
 
-        final Label label = new Label("Command");
+        final Label label = new Label("Oddysea Command Line");
         root.getChildren().add(label); // コンテナにラベルを貼りつける
 
         // コマンドの入力するフォームの作成
@@ -69,37 +69,18 @@ public class Main extends Application{
         //        ("=="比較はオブジェクト自体の比較になるため)
         if(e.getText().equals("\r"))  
         {
-            String path = new File(".").getAbsoluteFile().getParent();
             System.out.println("要求コマンドは" + cmd +"ですね。" );
-            if(execCommnd( cmd ) == true)
-            {
-                l.setText("要求コマンドは" + cmd +"ですね。" );
-                Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
-                imgView.setImage(next_img);
-            }
-            else
-            {
-                l.setText("そんなコマンドありませんよ？");
-
-                Image next_img = new Image( "file:///" + path + "\\img\\angry.png" );
-                imgView.setImage(next_img);
-            }
+            execCommnd( cmd, l, imgView) ;
             c.clear();
         }
     }
 
     // [Abstract]   要求されたコマンドの実行を行う
     // [Projection] f: String -> Boolean
-    private Boolean execCommnd( String cmd )
+    private void execCommnd( String cmd, Label l, ImageView imgView )
     {
-        if( cmd.equals("ls") )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+            Comment.renderExpression(cmd, imgView);
+            l.setText(Comment.getComment(cmd));
     }
     
 }
