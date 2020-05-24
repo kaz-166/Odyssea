@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 
 public class HTTPConnection {
@@ -23,19 +22,7 @@ public class HTTPConnection {
             while((line = reader.readLine()) != null)
             {
                 xml += line;
-                if(line.contains("<div class=\"forecastCity\""))
-                {
-                    line = reader.readLine(); //table
-                    line = reader.readLine();// tbody
-                    line = reader.readLine(); // tr
-                    line = reader.readLine(); // td
-                    line = reader.readLine(); // div
-                    line = reader.readLine();
-                    //xml += line;
-                    //xml = xml.replaceAll("[0-~]+","");
-                }
             }
-            System.out.println(xml);
             reader.close(); 
             return xml; 
           }catch(IOException e){

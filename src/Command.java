@@ -3,7 +3,7 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.util.Random;
 
-public  class Comment {
+public  class Command {
 
     private static final String chats[][] = 
     {
@@ -41,6 +41,32 @@ public  class Comment {
             html = html.replaceAll("[0-~]|\"|}|!|,| ","");
             html = html.replaceAll("。","。\n");
             return ("関東地方の天気情報ですね。ええと...\n" + html);
+        }
+        // COVID-19の情報取得するコマンド
+        else if(cmd.equals("covid19"))
+        {
+            String html = HTTPConnection.scraping(Settings.COVID19_TOKYO_URL);
+            html  = html.split("新規患者に関する報告件数の推移")[1];
+            String[] info = html.split("日別値");
+            String new_patients = info[0];
+            new_patients  = new_patients.split("<small")[0];
+            new_patients  = new_patients.split("<span class=\"DataView-DataInfo-summary\">|<small class=\"DataView-DataInfo-date\">")[1];
+            new_patients  = new_patients.replaceAll("　| ", "");
+            
+            String date = info[0].split("<span class=\"DataView-DataInfo-summary\">|<small class=\"DataView-DataInfo-date\">")[2];
+            date = date.replaceAll(" ","");
+            
+            String rate = info[1].split("</small>")[0];
+            rate = rate.replaceAll("（", "(");
+            rate = rate.replaceAll("）", ")");
+            
+
+            String comment = "新型コロナウイルス(COVID-19)の情報です。\n";
+            comment += "直近(";
+            comment +=  date;
+            comment += ")の東京都の新規感染者数は" + new_patients + "人"+ rate +"です。\n";
+            comment += "外出後は手洗いうがいをして体調管理には気をつけましょうね。";
+            return comment;
         }
         else
         {
@@ -93,9 +119,14 @@ public  class Comment {
             Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
             imgView.setImage(next_img);
         }
+        else if(cmd.equals("covid19"))
+        {
+            Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
+            imgView.setImage(next_img);
+        }
         else
         {
-           Image next_img = new Image( "file:///" + path + "\\img\\angry.png" );
+           Image next_img = new Image( "file:///" + path + "\\img\\confused.png" );
             imgView.setImage(next_img);
         }
     }
