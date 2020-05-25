@@ -80,8 +80,8 @@ public class Main extends Application{
     // [Projection] f: String -> Boolean
     private void execCommnd( String cmd, Label l, ImageView imgView )
     {
-            Command.renderExpression(cmd, imgView);
-            l.setText(Command.getComment(cmd));
+        l.setText(Command.getComment(cmd));
+        Command.renderExpression(cmd, imgView);
     }
     
 }

@@ -5,15 +5,10 @@ import java.util.Random;
 
 public  class Command {
 
-    private static final String chats[][] = 
-    {
-        {"そんなコマンド打つ暇があったらコーディングしてくださいよ？","angry"},
-        {"本日も頑張って行きましょう！","happy"},
-    };
-
     private static final Random rand = new Random();
+    static int chat_id = 0;
 
-
+    // [Abstract] コマンドを解析し、処理を行い結果を返すメソッド
     public static String getComment( String cmd )
     {
         String[] cmdset = cmd.split(" +");
@@ -31,7 +26,12 @@ public  class Command {
         }
         else if( cmdset[0].equals("chat") )
         {
-            return chats[rand.nextInt(chats.length)][0];
+            chat_id = rand.nextInt(Chat.chats.length);
+            System.out.println(Chat.chats[chat_id][1]);
+            System.out.println(Chat.chats[chat_id][1]);
+            System.out.println(Chat.chats[chat_id][1]);
+            System.out.println(Chat.chats[chat_id][1]);
+            return Chat.chats[chat_id][0];
         }
         else if( cmdset[0].equals("weather") )
         {
@@ -87,6 +87,7 @@ public  class Command {
         }
     }
 
+    // [Abstract] コマンド実行時の表情を変更するメソッド
     public static void renderExpression(String cmd, ImageView imgView)
     {
         String path = new File(".").getAbsoluteFile().getParent();
@@ -105,19 +106,19 @@ public  class Command {
             Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
             imgView.setImage(next_img);
         }
-        else if(cmd.equals("chat"))
+        else if( cmd.equals("chat") )
         {
-            if( chats[rand.nextInt(chats.length)][1].equals("normal") )
+            if( Chat.chats[chat_id][1].equals("normal") )
             {
                 Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
                 imgView.setImage(next_img);
             }
-            else if( chats[rand.nextInt(chats.length)][1].equals("happy") )
+            else if( Chat.chats[chat_id][1].equals("happy") )
             {
                 Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
                 imgView.setImage(next_img);
             }
-            else if( chats[rand.nextInt(chats.length)][1].equals("angry") )
+            else if( Chat.chats[chat_id][1].equals("angry") )
             {
                 Image next_img = new Image( "file:///" + path + "\\img\\angry.png" );
                 imgView.setImage(next_img);
@@ -125,7 +126,8 @@ public  class Command {
             else
             {
             }
-            System.out.println(chats[rand.nextInt(chats.length)][1]);
+            System.out.print("expression: ");
+            System.out.println(Chat.chats[chat_id][1]);
         }
         else if(cmd.equals("weather"))
         {
