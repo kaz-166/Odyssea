@@ -1,7 +1,9 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.Vector;
 
 public  class Command {
 
@@ -27,28 +29,46 @@ public  class Command {
         else if( cmdset[0].equals("chat") )
         {
             chat_id = rand.nextInt(Chat.chats.length);
-            System.out.println(Chat.chats[chat_id][1]);
-            System.out.println(Chat.chats[chat_id][1]);
-            System.out.println(Chat.chats[chat_id][1]);
-            System.out.println(Chat.chats[chat_id][1]);
             return Chat.chats[chat_id][0];
         }
         else if( cmdset[0].equals("weather") )
         {
-            String html = HTTPConnection.scraping(Settings.WEATHER_URL);
-            html  = html.split("comment:")[1];
-            html  = html.split("title:")[0];
-           // html  = html.split("<p>")[2];
-            html = html.replaceAll("[0-~]|\"|}|!|,| ","");
-            html = html.replaceAll("。","。\n");
-            return ("関東地方の天気情報ですね。ええと...\n" + html);
+            HTTPConnection htp = new HTTPConnection("csv"); 
+            htp.scraping(Settings.WEATHER_URL, "Shift-JIS");
+            Vector<String> csv_v;
+            csv_v = htp.getHttpResult();
+            String[] csv_a = new String[csv_v.size()];
+            csv_v.copyInto(csv_a);
+            Vector<String> weather = new Vector<String>();
+            for(int i = 0; i < csv_a.length; i++)
+            {
+                if(csv_a[i].contains("千葉県"))
+                {
+                    weather.add(csv_a[i]);
+                }
+            }
+            String[] result = new String[weather.size()];
+            weather.copyInto(result);
+
+            String output = "";
+            for(int i = 0; i < result.length; i++)
+            {
+                String[] line = result[i].split(",");
+                output += line[1] + line[2] + "の最高気温は" + line[9] + "[℃]、前日比は" + line[15]+ "[℃]です。" +  "\n";
+            }
+
+            return ("本日の千葉県の天気情報ですね。ええと...\n" + output);
         }
         // COVID-19の情報取得するコマンド
         else if( cmdset[0].equals("covid19") )
         {
             // 東京都の感染症対策公式サイトにGETコマンドを発行し情報を取得
-            String html = HTTPConnection.scraping(Settings.COVID19_TOKYO_URL);
-            String[] scr  = html.split("新規患者に関する報告件数の推移");
+            HTTPConnection htp = new HTTPConnection("html"); 
+            htp.scraping(Settings.COVID19_TOKYO_URL, "");
+            
+            String[] html = new String[1]; // fillHttpResultIntoメソッドで参照渡しをするために要素数1の配列として定義
+            htp.fillHttpResultInto(html);
+            String[] scr  = html[0].split("新規患者に関する報告件数の推移");
             String[] info = scr[1].split("日別値");
             String new_patients = info[0];
             new_patients  = new_patients.split("<small")[0];
@@ -67,7 +87,6 @@ public  class Command {
             rate = rate.replaceAll("（", "(");
             rate = rate.replaceAll("）", ")");
             
-
             String comment = "新型コロナウイルス(COVID-19)の情報ですね。\n";
             comment += "直近(";
             comment +=  date;
