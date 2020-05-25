@@ -28,6 +28,10 @@ public class Main extends Application{
 
         String path = new File(".").getAbsoluteFile().getParent();
         Settings.current_path = path;
+        // アイコンの設定
+        Image icon = new Image( "file:///" + path + "\\img\\ilias.png" );
+        primaryStage.getIcons().add( icon );
+
         // File URI schemeで指定する
         Image image = new Image( "file:///" + path + "\\img\\normal.png" );
         //imageviewの作成
@@ -46,8 +50,6 @@ public class Main extends Application{
         // System.out.println( "テキストフィールドの値：" + command.getText() ) );
         final Label result = new Label("ここに結果が表示されます");
         root.getChildren().add(result);
-
-
         
 
         // Keyがタイプされたイベントを登録するコンビニエンスメソッド
