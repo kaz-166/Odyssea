@@ -100,6 +100,33 @@ public  class Command {
             HTTPConnection.browsing(Settings.THINK_TANK_URL);
             return "開発メモ(Think-Tnak-Case)を開きますね";
         }
+        else if( cmdset[0].equals("train") )
+        {
+            HTTPConnection htp = new HTTPConnection("html"); 
+            htp.scraping(Settings.TRAIN_URL, "");
+            
+            String[] html = new String[1]; // fillHttpResultIntoメソッドで参照渡しをするために要素数1の配列として定義
+            htp.fillHttpResultInto(html);
+           
+            html[0] = html[0].split("現在運行情報のある路線")[1];
+            html[0] = html[0].split("関東の主要鉄道")[0];
+            html[0] = html[0].replaceAll("\n|\r","");
+            String[] tr = html[0].split("<tr>|</tr>|<td>|</td>");
+
+            String result = "以下の路線で遅延情報が出ているらしいです。\n";
+            for(int i = 0; i < tr.length; i++)
+            {
+                System.out.print(i);
+                System.out.print(":   ");
+                System.out.println(tr[i]);
+                if( ( !tr[i].contains("<") ) && ( !tr[i].equals("") ) )
+                {
+                    result += " - " + tr[i].split("は")[0] + "\n";
+                }
+            }
+
+            return result;
+        }
         else
         {
             return ("そんなコマンドありませんよ？");
@@ -148,19 +175,24 @@ public  class Command {
             System.out.print("expression: ");
             System.out.println(Chat.chats[chat_id][1]);
         }
-        else if(cmd.equals("weather"))
+        else if( cmd.equals("weather") )
         {
             Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
             imgView.setImage(next_img);
         }
-        else if(cmd.equals("covid19"))
+        else if( cmd.equals("covid19") )
         {
             Image next_img = new Image( "file:///" + path + "\\img\\normal.png" );
             imgView.setImage(next_img);
         }
-        else if(cmd.equals("think"))
+        else if( cmd.equals("think") )
         {
             Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
+            imgView.setImage(next_img);
+        }
+        else if( cmd.equals("train") )
+        {
+            Image next_img = new Image( "file:///" + path + "\\img\\surprised.png" );
             imgView.setImage(next_img);
         }
         else
