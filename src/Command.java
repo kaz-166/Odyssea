@@ -127,6 +127,11 @@ public  class Command {
 
             return result;
         }
+        else if( cmdset[0].equals("yotei") )
+        {
+            HTTPConnection.browsing(Settings.YOTEI_URL);
+            return "予定管理アプリ(yotei-app)を開きますね。";
+        }
         else
         {
             return ("そんなコマンドありませんよ？");
@@ -193,6 +198,11 @@ public  class Command {
         else if( cmd.equals("train") )
         {
             Image next_img = new Image( "file:///" + path + "\\img\\surprised.png" );
+            imgView.setImage(next_img);
+        }
+        else if( cmd.equals("yotei") )
+        {
+            Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
             imgView.setImage(next_img);
         }
         else

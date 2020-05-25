@@ -1,0 +1,3 @@
+cd 'C:\Users\KAZUMA\Odyssea'
+'C:\Users\KAZUMA\.vscode\extensions\vscjava.vscode-java-debug-0.26.0\scripts\launcher.bat'
+'C:\Program Files\Java\jdk1.8.0_131\bin\java.exe' '-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=localhost:59530' '-Dfile.encoding=UTF-8' '-cp' 'C:\Users\KAZUMA\AppData\Roaming\Code\User\workspaceStorage\4eadc370029631a7b4cda7c37f7ea18c\redhat.java\jdt_ws\Odyssea_e4a57c35\bin' 'Main'

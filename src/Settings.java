@@ -4,6 +4,7 @@ public class Settings {
     public static final String COVID19_TOKYO_URL = "https://stopcovid19.metro.tokyo.lg.jp/";
     public static final String THINK_TANK_URL =  "https://think-tank-case.herokuapp.com/";
     public static final String TRAIN_URL = "https://transit.yahoo.co.jp/traininfo/area/4/";
+    public static final String YOTEI_URL = "https://yotei-app-1241210.herokuapp.com";
     
     public static String current_path;
 }
