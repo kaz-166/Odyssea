@@ -15,13 +15,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Main extends Application{
-    public static void main(final String[] args) throws Exception {
+    public static void main( final String[] args ) throws Exception {
         // JavaFXのスレッドを起動する
         launch(args);
     }
 
     @Override
-    public void start(final Stage primaryStage) throws Exception {
+    public void start( final Stage primaryStage ) throws Exception {
         System.setProperty("prism.lcdtext", "false");
         primaryStage.setTitle("Oddysea Command Line"); // ステージのメインタイトルを設定する
         final VBox root = new VBox(); // ルートのコンテナ
