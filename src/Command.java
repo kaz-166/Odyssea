@@ -116,9 +116,6 @@ public  class Command {
             String result = "以下の路線で遅延情報が出ているらしいです。\n";
             for(int i = 0; i < tr.length; i++)
             {
-                System.out.print(i);
-                System.out.print(":   ");
-                System.out.println(tr[i]);
                 if( ( !tr[i].contains("<") ) && ( !tr[i].equals("") ) )
                 {
                     result += " - " + tr[i].split("は")[0] + "\n";
@@ -131,6 +128,32 @@ public  class Command {
         {
             HTTPConnection.browsing(Settings.YOTEI_URL);
             return "予定管理アプリ(yotei-app)を開きますね。";
+        }
+        else if(cmdset[0].equals("rain"))
+        {   
+            HTTPConnection htp = new HTTPConnection("html"); 
+            htp.scraping(Settings.RAIN_URL, "");
+            
+            String[] html = new String[1]; // fillHttpResultIntoメソッドで参照渡しをするために要素数1の配列として定義
+            htp.fillHttpResultInto(html);
+            html[0] = html[0].replaceAll("\n|\r","");
+            String[] item = html[0].split("<div class=\"weather-day__item\">");
+            
+            String result = "降水情報ですね。予報によりますと...\n";
+            for(int i = 1; i < item.length-1; i++)
+            {
+                item[i] = item[i].replaceAll("</div>|<br>|</p>| ","");
+                item[i] = item[i].replace("<pclass=\"weather-day__time\">","<>");
+                item[i] = item[i].replace("<pclass=\"weather-day__t\">","<>");
+                item[i] = item[i].replace("<pclass=\"weather-day__w\">","<>");
+                item[i] = item[i].replace("<pclass=\"weather-day__r\">","<>");
+                item[i] = item[i].replace("<pclass=\"weather-day__icon\">","<>");
+                String[] elem = item[i].split("<>");
+                result += elem[1] + "の降水量は" + elem[3] + "、気温は" + elem[4] + "、\n";
+            }
+            result += "とのことです。";
+
+            return result;
         }
         else
         {
@@ -201,6 +224,11 @@ public  class Command {
             imgView.setImage(next_img);
         }
         else if( cmd.equals("yotei") )
+        {
+            Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
+            imgView.setImage(next_img);
+        }
+        else if( cmd.equals("rain") )
         {
             Image next_img = new Image( "file:///" + path + "\\img\\happy.png" );
             imgView.setImage(next_img);

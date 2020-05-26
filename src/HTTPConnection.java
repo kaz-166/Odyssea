@@ -31,6 +31,7 @@ public class HTTPConnection{
         try{
           URL  url_obj = new URL(url);
           try{
+            System.out.println(Settings.EXECUTOR_NAME + " send a GET request to \"" + url + "\"" );
             HttpURLConnection http = (HttpURLConnection)url_obj.openConnection();
             http.setRequestMethod("GET");
             http.connect();
@@ -48,26 +49,21 @@ public class HTTPConnection{
             if( this.type.equals("html")  )
             {
                 String xml = "", line = "";
-                while((line = reader.readLine()) != null)
-                {
-                    xml += line;
-                }
+                while((line = reader.readLine()) != null)  xml += line;
                 this.html = xml;
             }
             else if( this.type.equals("csv") )
             {
                 Vector<String> xml = new Vector<>();
                 String  line = "";
-                while((line = reader.readLine()) != null)
-                {
-                    xml.add(line);
-                }
+                while((line = reader.readLine()) != null) xml.add(line);
                 this.csv = xml;
             }
             else
             {
                 System.err.println("Constructor Invalid Type Exception");
             }
+            System.out.println("HTTP Connection was succeeded.");
             reader.close(); 
             return; 
           }catch(IOException e){
@@ -75,7 +71,7 @@ public class HTTPConnection{
           }
         
         }catch(MalformedURLException e){
-            System.err.println("Malformed URL");
+            System.err.println("[ERROR] Malformed URL");
         }
         return;
     }
@@ -99,10 +95,10 @@ public class HTTPConnection{
             URI uri = new URI(uriString);
             desktop.browse(uri);
         } catch (URISyntaxException e) {
-            System.err.println("Malformed URL");
+            System.err.println("[ERROR] Malformed URL");
             e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("Malformed URL");
+            System.err.println("[ERROR] Malformed URL");
             e.printStackTrace();
         }
     }

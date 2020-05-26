@@ -23,7 +23,7 @@ public class Main extends Application{
     @Override
     public void start( final Stage primaryStage ) throws Exception {
         System.setProperty("prism.lcdtext", "false");
-        primaryStage.setTitle("Oddysea Command Line"); // ステージのメインタイトルを設定する
+        primaryStage.setTitle("Odyssea Command Client"); // ステージのメインタイトルを設定する
         final VBox root = new VBox(); // ルートのコンテナ
 
         String path = new File(".").getAbsoluteFile().getParent();
@@ -58,7 +58,7 @@ public class Main extends Application{
          execEnterAction(event, command, result, imgView);
         command.addEventHandler(KeyEvent.KEY_PRESSED, enterActionFilter);
 
-        final Scene scene = new Scene(root, 600, 400);// シーンの新規生成
+        final Scene scene = new Scene(root, 600, 500);// シーンの新規生成
         primaryStage.setScene(scene);           // 生成したシーンをステージに貼り付ける
 		primaryStage.show();                    // ステージを表示する
     }
@@ -72,7 +72,7 @@ public class Main extends Application{
         //        ("=="比較はオブジェクト自体の比較になるため)
         if(e.getText().equals("\r"))  
         {
-            System.out.println("要求コマンドは" + cmd +"ですね。" );
+            System.out.println(Settings.EXECUTOR_NAME + " got a command: " + cmd + "." );
             execCommnd( cmd, l, imgView) ;
             c.clear();
         }
