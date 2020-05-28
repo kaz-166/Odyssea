@@ -8,21 +8,51 @@ import javafx.scene.control.*;
 
 public  class Command {
     private static final Random rand = new Random();
-    
+    /* chatコマンド連続使用時にイリアス君を怒らせる用のメンバ変数 */
+    private static int chat_cnt = 0; 
+    private static String before_command = "";
+
+/**********************************************************************
+ * Public Method
+ **********************************************************************/
     // [Abstract] コマンドを解析し、処理を行い結果を返すメソッド
     public static void execute( String cmd, ImageView imgView, Label comment )
     {
         String[] cmdset = cmd.split(" +");
         String result = "";
         final String NO_COMMAND = "そんなコマンドありませんよ？\n";
+        final int CHAT_YELLOWCARD_LIMIT = 5;
+        final int CHAT_REDCARD_LIMIT = 8;
 
         switch( cmdset[0] )
         {
             case "chat":    
-                int chat_id = 0;
-                chat_id = rand.nextInt(Chat.chats.length);
-                result= exec_command_chat( chat_id );
-                renderIliasExpression( Chat.chats[chat_id][1], imgView );
+                if( cmdset[0].equals( before_command ) )
+                {
+                    chat_cnt++;
+                }
+                else
+                {
+                    chat_cnt = 0;
+                }
+                System.out.println(chat_cnt);
+                if( chat_cnt < CHAT_YELLOWCARD_LIMIT )
+                {
+                    int chat_id = 0;
+                    chat_id = rand.nextInt(Chat.chats.length);
+                    result= exec_command_chat( chat_id );
+                    renderIliasExpression( Chat.chats[chat_id][1], imgView );
+                }
+                else if( chat_cnt < CHAT_REDCARD_LIMIT )
+                {
+                    result = Chat.alert[0];
+                    renderIliasExpression( Chat.alert[1], imgView );
+                }
+                else
+                {
+                    result = Chat.finish[0];
+                    renderIliasExpression( Chat.finish[1], imgView );
+                }
             break;
             case "weather": 
                 result = exec_command_weather();
@@ -53,9 +83,13 @@ public  class Command {
                 renderIliasExpression( "confused", imgView );
                 break;
         }
+        before_command = cmdset[0];
         comment.setText( result );
     }
 
+/**********************************************************************
+ * Private Method
+ **********************************************************************/
     private static void renderIliasExpression( String exp, ImageView imgView )
     {
         String path = new File(".").getAbsoluteFile().getParent();
