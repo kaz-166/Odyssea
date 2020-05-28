@@ -6,7 +6,7 @@ public class Settings {
     public static final String THINK_TANK_URL =  "https://think-tank-case.herokuapp.com/";
     public static final String TRAIN_URL = "https://transit.yahoo.co.jp/traininfo/area/4/";
     public static final String YOTEI_URL = "https://yotei-app-1241210.herokuapp.com";
-    public static final String RAIN_URL = "https://weathernews.jp/onebox/36/136.93/temp=c";
+    public static final String RAIN_URL = "https://weathernews.jp/onebox/35.70/139.93/temp=c";
 
     public static String current_path;
 }

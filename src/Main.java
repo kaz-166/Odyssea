@@ -73,17 +73,8 @@ public class Main extends Application{
         if(e.getText().equals("\r"))  
         {
             System.out.println(Settings.EXECUTOR_NAME + " got a command: " + cmd + "." );
-            execCommnd( cmd, l, imgView) ;
+            Command.execute(cmd,imgView, l);
             c.clear();
         }
     }
-
-    // [Abstract]   要求されたコマンドの実行を行う
-    // [Projection] f: String -> Boolean
-    private void execCommnd( String cmd, Label l, ImageView imgView )
-    {
-        l.setText(Command.getComment(cmd));
-        Command.renderExpression(cmd, imgView);
-    }
-    
 }
