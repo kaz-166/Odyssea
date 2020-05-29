@@ -3,14 +3,10 @@ import java.io.File;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.StackPane;
 import javafx.scene.control.*;
-import javafx.geometry.Orientation;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

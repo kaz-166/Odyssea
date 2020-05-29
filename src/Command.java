@@ -1,7 +1,6 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.Vector;
 import javafx.scene.control.*;
