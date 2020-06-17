@@ -200,31 +200,7 @@ public  class Command {
 
     private static String exec_command_weather()
     {
-        HTTPConnection htp = new HTTPConnection("csv"); 
-        htp.scraping(Settings.WEATHER_URL, "Shift-JIS");
-        Vector<String> csv_v;
-        csv_v = htp.getHttpResult();
-        String[] csv_a = new String[csv_v.size()];
-        csv_v.copyInto(csv_a);
-        Vector<String> weather = new Vector<String>();
-        for(int i = 0; i < csv_a.length; i++)
-        {
-            if(csv_a[i].contains("千葉県"))
-            {
-                weather.add(csv_a[i]);
-            }
-        }
-        String[] result = new String[weather.size()];
-        weather.copyInto(result);
-
-        String output = "";
-        for(int i = 0; i < result.length; i++)
-        {
-            String[] line = result[i].split(",");
-            output += line[1] + line[2] + "の最高気温は" + line[9] + "[℃]、前日比は" + line[15]+ "[℃]です。" +  "\n";
-        }
-
-        return ("本日の千葉県の天気情報ですね。ええと...\n" + output);
+        return HTTPConnection.requesting_post("{\"type\": \"text\", \"text\": \"天気\"}");
     }
 
     private static String exec_command_yotei()
