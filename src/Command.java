@@ -25,6 +25,10 @@ public  class Command {
 
         switch( cmdset[0] )
         {
+            case "greeting":
+                result = HTTPConnection.requesting_post("{\"type\": \"text\", \"text\": \"おはよう\"}");
+                renderIliasExpression( "happy", imgView );
+                break;
             case "chat":    
                 if( cmdset[0].equals( before_command ) )
                 {

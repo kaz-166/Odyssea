@@ -42,8 +42,6 @@ public class Main extends Application{
         command.setTooltip(new Tooltip("command field"));
         command.setPromptText("please input command");
         root.getChildren().add(command);
-        // command.textProperty().addListener( ( ov , old , current ) ->
-        // System.out.println( "テキストフィールドの値：" + command.getText() ) );
         final Label result = new Label("ここに結果が表示されます");
         root.getChildren().add(result);
         
