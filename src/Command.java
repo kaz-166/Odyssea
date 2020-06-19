@@ -26,7 +26,11 @@ public  class Command {
         switch( cmdset[0] )
         {
             case "greeting":
-                result = HTTPConnection.requesting_post("{\"type\": \"text\", \"text\": \"おはよう\"}");
+                result = HTTPConnection.requesting_post("{\"id\": \"1\"}");
+                renderIliasExpression( "happy", imgView );
+                break;
+            case "manual":
+                result = exec_command_manual();
                 renderIliasExpression( "happy", imgView );
                 break;
             case "chat":    
@@ -104,6 +108,12 @@ public  class Command {
     {
         HTTPConnection.browsing(Settings.THINK_TANK_URL);
         return "開発メモ(Think-Tnak-Case)を開きますね";
+    }
+
+    private static String exec_command_manual()
+    {
+        HTTPConnection.browsing(Settings.MANUAL_URL);
+        return "ユーザマニュアルを開きますね";
     }
 
     private static String exec_command_chat( int chat_id )
@@ -200,7 +210,7 @@ public  class Command {
 
     private static String exec_command_weather()
     {
-        return HTTPConnection.requesting_post("{\"type\": \"text\", \"text\": \"天気\"}");
+        return HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"tokyo\", \"hour\": \"7\"}");
     }
 
     private static String exec_command_yotei()
