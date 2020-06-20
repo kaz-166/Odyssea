@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.awt.Desktop;
 import java.util.Vector;
+import java.util.HashMap;
 
 
 
@@ -106,13 +107,12 @@ public class HTTPConnection{
         }
     }
 
-    public static String requesting_post(String json)
+    public static HashMap<String, String> requesting_post(String json)
     {
         HttpURLConnection con = null;
         StringBuffer result = new StringBuffer();
         
         try {
-
             // [refactor!] URL名は適切なデータ定義モジュールに移動すること
             URL url = new URL("http://localhost:3000/odyssea");
             con = (HttpURLConnection) url.openConnection();
@@ -156,7 +156,13 @@ public class HTTPConnection{
             }
 
         } catch (Exception e1) {
+            // 失敗時の処理
+            HashMap<String, String> ret_json = new HashMap<String, String>();
+            ret_json.put("status", "TIMEOUT ERROR");
+            ret_json.put("message", "接続がタイムアウトしました。");
+            ret_json.put("expression", "confused");
             e1.printStackTrace();
+            return ret_json;
         } finally {
             if (con != null) {
                 // コネクションを切断
@@ -165,13 +171,19 @@ public class HTTPConnection{
         }
 
         // Convert Json to Message
+        HashMap<String, String> ret_json = new HashMap<String, String>();
         String res_message = result.toString();
-        res_message = res_message.split(",")[1];
-        res_message = res_message.split(":")[1];
         res_message = res_message.replaceAll("\"", "");
-        res_message = res_message.replaceAll("}", "");
+        res_message = res_message.replace("{", "");
+        res_message = res_message.replace("}", "");
 
-        return res_message;
+        String[] elem = res_message.split(",");
+        for(int i = 0; i < elem.length; i++)
+        {
+            ret_json.put( elem[i].split(":")[0], elem[i].split(":")[1] );
+        }
+
+        return ret_json;
     } 
 }
 

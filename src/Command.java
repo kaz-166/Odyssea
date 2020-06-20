@@ -3,7 +3,11 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 import java.util.Random;
 import java.util.Vector;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.HashMap;
 import javafx.scene.control.*;
+
 
 public  class Command {
     private static final Random rand = new Random();
@@ -18,7 +22,7 @@ public  class Command {
     public static void execute( String cmd, ImageView imgView, Label comment )
     {
         String[] cmdset = cmd.split(" +");
-        String result = "";
+        HashMap<String, String> result;
         final String NO_COMMAND = "そんなコマンドありませんよ？\n";
         final int CHAT_YELLOWCARD_LIMIT = 5;
         final int CHAT_REDCARD_LIMIT = 8;
@@ -27,13 +31,14 @@ public  class Command {
         {
             case "greeting":
                 result = HTTPConnection.requesting_post("{\"id\": \"1\"}");
-                renderIliasExpression( "happy", imgView );
+                renderIliasExpression( result.get("expression"), imgView );
                 break;
-            case "manual":
-                result = exec_command_manual();
-                renderIliasExpression( "happy", imgView );
-                break;
-            case "chat":    
+            // case "manual":
+            //    result = exec_command_manual();
+            //    renderIliasExpression( "happy", imgView );
+            //    break;
+            // case "chat": 
+            /*   
                 if( cmdset[0].equals( before_command ) )
                 {
                     chat_cnt++;
@@ -60,38 +65,40 @@ public  class Command {
                     result = Chat.finish[0];
                     renderIliasExpression( Chat.finish[1], imgView );
                 }
-            break;
+            */
+            // break;
             case "weather": 
-                result = exec_command_weather();
-                renderIliasExpression( "happy", imgView );
+                result = exec_command_weather( cmdset );
+                renderIliasExpression( result.get("expression"), imgView );
                 break;
-            case "covid19":
-                result = exec_command_covid19();
-                renderIliasExpression( "normal", imgView );
-            break;
-            case "think":
-                result = exec_command_think();  
-                renderIliasExpression( "happy", imgView );
-            break;
-            case "train":
-                result = exec_command_train();
-                renderIliasExpression( "confused", imgView );
-            break;
-            case "rain":
-                result = exec_command_rain();
-                renderIliasExpression( "confused", imgView );
-            break;
-            case "yotei":
-                result = exec_command_yotei();
-                renderIliasExpression( "happy", imgView );
-            break;
+            // case "covid19":
+            //    result = exec_command_covid19();
+            //    renderIliasExpression( "normal", imgView );
+            // break;
+            // case "think":
+            //     result = exec_command_think();  
+            //    renderIliasExpression( "happy", imgView );
+            // break;
+            // case "train":
+            //     result = exec_command_train();
+            //     renderIliasExpression( "confused", imgView );
+            // break;
+            // case "rain":
+            //     result = exec_command_rain();
+            //     renderIliasExpression( "confused", imgView );
+            // break;
+            // case "yotei":
+            //     result = exec_command_yotei();
+            //     renderIliasExpression( "happy", imgView );
+            // break;
             default:
-                result += NO_COMMAND;
+                result = new HashMap<String, String>();
+                result.put("message", NO_COMMAND);
                 renderIliasExpression( "confused", imgView );
                 break;
         }
         before_command = cmdset[0];
-        comment.setText( result );
+        comment.setText( result.get("message") );
     }
 
 /**********************************************************************
@@ -204,13 +211,40 @@ public  class Command {
             result += elem[1] + "の降水量は" + elem[3] + "、気温は" + elem[4] + "、\n";
         }
         result += "とのことです。";
-
+ 
         return result;
     }
 
-    private static String exec_command_weather()
+    private static HashMap<String, String> exec_command_weather( String[] cmdset )
     {
-        return HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"tokyo\", \"hour\": \"7\"}");
+        HashMap<String, String> result;
+        if( cmdset.length == 1 )
+        {
+            result = HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"tokyo\", \"hour\": \"0\"}");
+        }
+        else if ( cmdset.length == 2 )
+        {
+            // 第一引数がlocationかhourのどちらか判定する
+            String regex = "[0-9]+";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(cmdset[1]);
+            if( m.find() )
+            {
+                // 第一引数がhourと判定された場合
+                result = HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"tokyo\", \"hour\": \"" + cmdset[1] + "\"}");
+            }
+            else
+            {
+                // 第一引数がlocationと判定された場合
+                result = HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"" + cmdset[1] + "\", \"hour\": \"0\"}");
+            }
+        }
+        else
+        {
+            result = HTTPConnection.requesting_post("{\"id\": \"3\", \"location\": \"" + cmdset[1] + "\", \"hour\": \"" + cmdset[2] + "\"}");
+        }
+
+        return result;
     }
 
     private static String exec_command_yotei()
